@@ -110,9 +110,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
             showFragment(selectedScreen);
         }
         else {
-            slidingRootNav.closeMenu();
-            Fragment selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
-            showFragment(selectedScreen);
+
         }
     }
 

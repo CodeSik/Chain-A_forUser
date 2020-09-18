@@ -1,0 +1,54 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/render"
+    tools:context="Transaction.TransactionFragment" >
+
+    <ImageView
+        android:id="@+id/mapimage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="177dp"
+        android:layout_marginEnd="59dp"
+        android:layout_marginBottom="400dp"
+        android:background="@drawable/renderforimage"
+        android:padding="10dp"
+        android:src="@drawable/mapimage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="280dp"
+        android:text="현재까지의 정보를 블록체인에 기록합니다."
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapimage" />
+
+    <Button
+        android:id="@+id/qrbutton"
+        android:layout_width="370dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="87dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="94dp"
+        android:background="@drawable/renderforbutton"
+        android:text="QR 코드 촬영하기"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
