@@ -22,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
-        android:id="@+id/request_location_updates_button"
+        android:id="@+id/request"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -96,7 +96,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="111dp"
         android:text="안전하며 투명한 동선 공개로 여러분의 안전을 책임집니다."
-        app:layout_constraintBottom_toTopOf="@+id/request_location_updates_button"
+        app:layout_constraintBottom_toTopOf="@+id/request"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />

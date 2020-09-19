@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.chaina.Intro;
+package com.example.chaina;
 
 
 import android.content.Context;
