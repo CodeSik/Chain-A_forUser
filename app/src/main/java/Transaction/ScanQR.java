@@ -1,5 +1,6 @@
 package Transaction;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -129,7 +130,7 @@ public class ScanQR extends AppCompatActivity {
 
     TextView address;
     Button smart;
-    String sendResult;
+    String sendResult="{";
     String address_string;
 
 
@@ -154,7 +155,7 @@ public class ScanQR extends AppCompatActivity {
         smart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                executeContractFunction(sendResult);
+                new GetAsyncTask(db.gpsDao()).execute(sendResult);
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
@@ -211,7 +212,7 @@ public class ScanQR extends AppCompatActivity {
         caver.wallet.add(executor);
 
         try {
-            Contract contract = new Contract(caver, ABIJson, "0x07638a88d529c964d5ef5b6242fe11431abdc0ca");
+            Contract contract = new Contract(caver, ABIJson, "0xd163eb0e3e0b6076c191b33d68d6dee5f3dfce8f");
 
             SendOptions sendOptions = new SendOptions();
             sendOptions.setFrom(executor.getAddress());
@@ -226,28 +227,101 @@ public class ScanQR extends AppCompatActivity {
     }
 
     //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
-    public static class GetAsyncTask extends AsyncTask<String, Void, Void> {
+    public class GetAsyncTask extends AsyncTask<String, Void, Void> {
         private GPSDao mGpsDao;
 
+        private String result;
         public  GetAsyncTask(GPSDao mGpsDao){
             this.mGpsDao = mGpsDao;
         }
 
+        ProgressDialog asyncDialog = new ProgressDialog(ScanQR.this);
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+            asyncDialog.setMessage("전송 중 입니다..");
+
+            asyncDialog.show();
+
+
+            super.onPreExecute();
+        }
 
         @Override
         protected Void doInBackground(String... strings) {
             //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
             //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
+            for (int i = 0; i < 5; i++) {
+
+                asyncDialog.setProgress(i * 30);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
             GPS[] gpsList = mGpsDao.getAll();
             for(int i=0 ; i < gpsList.length ; i++)
             {
-                strings[0] += Double.toString(gpsList[i].getLatitude());
-                strings[0] += Double.toString(gpsList[i].getLongitude());
-                strings[0] += gpsList[i].getTime();
-            }
+                strings[0] += ",{";
 
+                strings[0] += "\"lat\":\"";
+                strings[0] += Double.toString(gpsList[i].getLatitude());
+                strings[0] += "\",";
+
+                strings[0] += "\"lng\":\"";
+                strings[0] += Double.toString(gpsList[i].getLongitude());
+                strings[0] += "\",";
+
+                strings[0] += "\"addressName\":\"";
+                strings[0] += " ";
+                strings[0] += "\",";
+
+                strings[0] += "\"companyName\":\"";
+                strings[0] += " ";
+                strings[0] += "\",";
+
+                strings[0] += "\"time\":\"";
+                strings[0] += gpsList[i].getTime();
+                strings[0] += "\"}";
+            }
+            strings[0] += "}";
+            this.result=strings[0];
+
+            Caver caver = new Caver(Caver.BAOBAB_URL);
+            SingleKeyring executor = KeyringFactory.createFromPrivateKey("0x6fcc47c6988c2f1ef5b7e65121215d26a1d9483d1b46a18e4841d07d9a233df1");
+            caver.wallet.add(executor);
+
+            try {
+                Contract contract = new Contract(caver, ABIJson, "0x07638a88d529c964d5ef5b6242fe11431abdc0ca");
+
+                SendOptions sendOptions = new SendOptions();
+                sendOptions.setFrom(executor.getAddress());
+                sendOptions.setGas(BigInteger.valueOf(4000000));
+
+                Log.d("result",result);
+                //여기서 함수 이름 설정
+                TransactionReceipt.TransactionReceiptData receipt = contract.getMethod("insertInformation").send(Arrays.asList(result), sendOptions);
+            } catch (IOException | TransactionException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                //handle exception..
+            }
             return null;
         }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            asyncDialog.dismiss();
+        }
+
+
     }
 
     @Override
@@ -259,10 +333,7 @@ public class ScanQR extends AppCompatActivity {
                 backToMainActivity();// todo
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                sendResult = result.getContents();
-                new GetAsyncTask(db.gpsDao()).execute(sendResult);
-
-
+                sendResult +=result.getContents();
 
 
                 try {

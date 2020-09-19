@@ -41,7 +41,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
+import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import GPSInfo.GPS;
 import GPSInfo.GPSDao;
@@ -244,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                 Toast.makeText(MainActivity.this, Utils.getLocationText(location),
                         Toast.LENGTH_SHORT).show();
                 //DB Insert
-                new InsertAsyncTask(db.gpsDao()).execute(new GPS(location.getLongitude(),location.getLatitude(),Utils.getLocationTitle(getApplicationContext())));
+                new InsertAsyncTask(db.gpsDao()).execute(new GPS(location.getLongitude(),location.getLatitude(), DateFormat.getDateTimeInstance().format(new Date())));
             }
         }
     }

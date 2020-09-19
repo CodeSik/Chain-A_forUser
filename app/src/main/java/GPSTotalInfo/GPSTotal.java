@@ -1,4 +1,4 @@
-package GPSInfo;
+package GPSTotalInfo;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "gps_table")
-public class GPS {
+public class GPSTotal {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
@@ -27,7 +27,7 @@ public class GPS {
     private double latitude; // 위도
     private String time; // 시간
 
-    public GPS() {
+    public GPSTotal() {
     }
 
     public double getLongitude() {
@@ -44,7 +44,7 @@ public class GPS {
 
 
 
-    public GPS(double longitude, double latitude, String time)
+    public GPSTotal(double longitude, double latitude, String time)
     {
         this.latitude=latitude;
         this.longitude=longitude;
