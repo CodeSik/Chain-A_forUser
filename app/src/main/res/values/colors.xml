@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#27272E</color>
     <color name="colorAccent">#51B784</color>
     <color name="white">#FFFFFF</color>
+    <color name="colorDanger">#c17357</color>
+    <color name="colorDangerText">#e2e233</color>
+    <color name="colorSafe">#51B784</color>
+    <color name="colorSafeText">#e2e2ab</color>
 </resources>
