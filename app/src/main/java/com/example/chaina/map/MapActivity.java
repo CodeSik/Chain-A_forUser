@@ -1,5 +1,6 @@
 package com.example.chaina.map;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.chaina.MainActivity;
 import com.example.chaina.R;
 import com.example.chaina.map.gara.Data;
 import com.example.chaina.map.gara.Trace;
@@ -95,4 +97,12 @@ public class MapActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+
+    }
+
 }
