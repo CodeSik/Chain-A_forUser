@@ -9,8 +9,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chaina.R;
+import com.example.chaina.map.gara.Data;
+import com.example.chaina.map.gara.Trace;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
@@ -33,18 +36,48 @@ public class MapActivity extends AppCompatActivity {
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
-        MapPolyline polyline = new MapPolyline();
-        polyline.setTag(3000);
-        polyline.setLineColor(Color.argb(128, 0, 51, 196));
+        ArrayList<MapPOIItem> markers = new ArrayList<>();
+        MapPolyline myLine = new MapPolyline();
+        MapPolyline sickLine = new MapPolyline();
 
-        polyline.addPoint(MapPoint.mapPointWithGeoCoord(37.537229, 127.005515));
-        polyline.addPoint(MapPoint.mapPointWithGeoCoord(37.545024,127.03923));
-        polyline.addPoint(MapPoint.mapPointWithGeoCoord(37.527896,127.036245));
-        polyline.addPoint(MapPoint.mapPointWithGeoCoord(37.541889,127.095388));
+        Data.getScene1().forEach(person -> {
+            MapPOIItem.MarkerType type;
+            MapPolyline polyline;
+            int lineColor, markerColor;
+            if(person.getState() == 0) {
+                polyline = myLine;
+                type = MapPOIItem.MarkerType.BluePin;
+                lineColor = Color.argb(128, 0, 51, 196);
+                markerColor = Color.argb(64, 0, 196, 51);
+            }
+            else {
+                polyline = sickLine;
+                type = MapPOIItem.MarkerType.RedPin;
+                lineColor = Color.argb(128, 196, 51, 21);
+                markerColor = Color.argb(64, 196, 31, 0);
+            }
 
-        mapView.addPolyline(polyline);
+            for (Trace trace : person.getTraces()) {
+                if(!trace.getCompanyName().isEmpty()) {
+                    MapPOIItem marker = new MapPOIItem();
+                    marker.setItemName(trace.getCompanyName());
+                    marker.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(trace.getLat()), Double.parseDouble(trace.getLng())));
+                    marker.setMarkerType(type);
+                    markers.add(marker);
+                }
 
-        MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
+                polyline.setLineColor(lineColor);
+                polyline.addPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(trace.getLat()), Double.parseDouble(trace.getLng())));
+            }
+        });
+
+        mapView.addPolyline(myLine);
+        mapView.addPolyline(sickLine);
+        for (MapPOIItem marker : markers) {
+            mapView.addPOIItem(marker);
+        }
+
+        MapPointBounds mapPointBounds = new MapPointBounds(myLine.getMapPoints());
         int padding = 100; // px
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
 
