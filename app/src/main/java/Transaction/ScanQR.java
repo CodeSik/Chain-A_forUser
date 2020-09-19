@@ -1,6 +1,7 @@
 package Transaction;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.chaina.MainActivity;
 import com.example.chaina.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -33,11 +35,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import com.example.chaina.MainActivity;
+import GPSInfo.GPS;
+import GPSInfo.GPSDao;
+import GPSInfo.GPSDatabase;
 
 
 public class ScanQR extends AppCompatActivity {
-
+    GPSDatabase db;
     private IntentIntegrator qrScan;
 
     ScwService scwServiceInstance;
@@ -133,7 +137,7 @@ public class ScanQR extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanqr);
-
+        db = GPSDatabase.getAppDatabase(this);
         address = findViewById(R.id.address_text);
         smart = findViewById(R.id.smart);
 
@@ -221,6 +225,31 @@ public class ScanQR extends AppCompatActivity {
         }
     }
 
+    //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
+    public static class GetAsyncTask extends AsyncTask<String, Void, Void> {
+        private GPSDao mGpsDao;
+
+        public  GetAsyncTask(GPSDao mGpsDao){
+            this.mGpsDao = mGpsDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
+            //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
+            GPS[] gpsList = mGpsDao.getAll();
+            for(int i=0 ; i < gpsList.length ; i++)
+            {
+                strings[0] += Double.toString(gpsList[i].getLatitude());
+                strings[0] += Double.toString(gpsList[i].getLongitude());
+                strings[0] += gpsList[i].getTime();
+            }
+
+            return null;
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -231,6 +260,11 @@ public class ScanQR extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                 sendResult = result.getContents();
+                new GetAsyncTask(db.gpsDao()).execute(sendResult);
+
+
+
+
                 try {
                     address_string = jsonParsing(sendResult);
                     address.setText(address_string);

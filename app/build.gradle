@@ -56,6 +56,11 @@ dependencies {
             dirs 'aar'
         }
     }
+    //Room
+    def room_version = "2.2.5"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation 'com.samsung.android.sdk.coldwallet:KeystoreSDK_v1.3.0@aar'
 

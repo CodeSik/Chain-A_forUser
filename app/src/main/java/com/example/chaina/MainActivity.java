@@ -13,6 +13,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -42,6 +43,9 @@ import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
 
+import GPSInfo.GPS;
+import GPSInfo.GPSDao;
+import GPSInfo.GPSDatabase;
 import Transaction.TransactionFragment;
 import Utils.BackPressCloseHandler;
 import map.MapFragment;
@@ -85,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     private Button mRequestLocationUpdatesButton;
     private Button mRemoveLocationUpdatesButton;
 
+    // DB
+    GPSDatabase db;
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -108,6 +114,12 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
         myReceiver = new MyReceiver();
         setContentView(R.layout.activity_main);
+
+        //디비 생성
+        db = GPSDatabase.getAppDatabase(this);
+
+        //UI 갱신 (라이브데이터 Observer 이용, 해당 디비값이 변화가생기면 실행됨)
+
 
         // Check that the user hasn't revoked permissions by going to Settings.
         if (Utils.requestingLocationUpdates(this)) {
@@ -231,9 +243,29 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
             if (location != null) {
                 Toast.makeText(MainActivity.this, Utils.getLocationText(location),
                         Toast.LENGTH_SHORT).show();
+                //DB Insert
+                new InsertAsyncTask(db.gpsDao()).execute(new GPS(location.getLongitude(),location.getLatitude(),Utils.getLocationTitle(getApplicationContext())));
             }
         }
     }
+
+    //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
+    public static class InsertAsyncTask extends AsyncTask<GPS, Void, Void> {
+        private GPSDao mGpsDao;
+
+        public  InsertAsyncTask(GPSDao mGpsDao){
+            this.mGpsDao = mGpsDao;
+        }
+
+        @Override //백그라운드작업(메인스레드 X)
+        protected Void doInBackground(GPS... gpses) {
+            //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
+            //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
+            mGpsDao.insert(gpses[0]);
+            return null;
+        }
+    }
+
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
