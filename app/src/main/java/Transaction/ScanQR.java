@@ -3,6 +3,7 @@ package Transaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -35,12 +36,91 @@ public class ScanQR extends AppCompatActivity {
     private IntentIntegrator qrScan;
 
     ScwService scwServiceInstance;
-    private static final String ABIJson = "[{\"constant\":true,\"inputs\":[{\"name\":\"key\",\"type\":\"string\"}],\"name\":\"get\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"key\",\"type\":\"string\"},{\"name\":\"value\",\"type\":\"string\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]\n";
+    private static final String ABIJson = "[\n" +
+            "\t{\n" +
+            "\t\t\"constant\": true,\n" +
+            "\t\t\"inputs\": [],\n" +
+            "\t\t\"name\": \"count\",\n" +
+            "\t\t\"outputs\": [\n" +
+            "\t\t\t{\n" +
+            "\t\t\t\t\"name\": \"\",\n" +
+            "\t\t\t\t\"type\": \"uint256\"\n" +
+            "\t\t\t}\n" +
+            "\t\t],\n" +
+            "\t\t\"payable\": false,\n" +
+            "\t\t\"stateMutability\": \"view\",\n" +
+            "\t\t\"type\": \"function\"\n" +
+            "\t},\n" +
+            "\t{\n" +
+            "\t\t\"constant\": true,\n" +
+            "\t\t\"inputs\": [],\n" +
+            "\t\t\"name\": \"getCurrentGPSInfo\",\n" +
+            "\t\t\"outputs\": [\n" +
+            "\t\t\t{\n" +
+            "\t\t\t\t\"name\": \"\",\n" +
+            "\t\t\t\t\"type\": \"string\"\n" +
+            "\t\t\t}\n" +
+            "\t\t],\n" +
+            "\t\t\"payable\": false,\n" +
+            "\t\t\"stateMutability\": \"view\",\n" +
+            "\t\t\"type\": \"function\"\n" +
+            "\t},\n" +
+            "\t{\n" +
+            "\t\t\"constant\": false,\n" +
+            "\t\t\"inputs\": [\n" +
+            "\t\t\t{\n" +
+            "\t\t\t\t\"name\": \"_personalInfo\",\n" +
+            "\t\t\t\t\"type\": \"string\"\n" +
+            "\t\t\t}\n" +
+            "\t\t],\n" +
+            "\t\t\"name\": \"insertInformation\",\n" +
+            "\t\t\"outputs\": [],\n" +
+            "\t\t\"payable\": false,\n" +
+            "\t\t\"stateMutability\": \"nonpayable\",\n" +
+            "\t\t\"type\": \"function\"\n" +
+            "\t},\n" +
+            "\t{\n" +
+            "\t\t\"constant\": true,\n" +
+            "\t\t\"inputs\": [\n" +
+            "\t\t\t{\n" +
+            "\t\t\t\t\"name\": \"\",\n" +
+            "\t\t\t\t\"type\": \"address\"\n" +
+            "\t\t\t}\n" +
+            "\t\t],\n" +
+            "\t\t\"name\": \"gpsContainer\",\n" +
+            "\t\t\"outputs\": [\n" +
+            "\t\t\t{\n" +
+            "\t\t\t\t\"name\": \"\",\n" +
+            "\t\t\t\t\"type\": \"string\"\n" +
+            "\t\t\t}\n" +
+            "\t\t],\n" +
+            "\t\t\"payable\": false,\n" +
+            "\t\t\"stateMutability\": \"view\",\n" +
+            "\t\t\"type\": \"function\"\n" +
+            "\t},\n" +
+            "\t{\n" +
+            "\t\t\"anonymous\": false,\n" +
+            "\t\t\"inputs\": [\n" +
+            "\t\t\t{\n" +
+            "\t\t\t\t\"indexed\": true,\n" +
+            "\t\t\t\t\"name\": \"_sender\",\n" +
+            "\t\t\t\t\"type\": \"address\"\n" +
+            "\t\t\t},\n" +
+            "\t\t\t{\n" +
+            "\t\t\t\t\"indexed\": false,\n" +
+            "\t\t\t\t\"name\": \"_personalInfo\",\n" +
+            "\t\t\t\t\"type\": \"string\"\n" +
+            "\t\t\t}\n" +
+            "\t\t],\n" +
+            "\t\t\"name\": \"GPSInsertion\",\n" +
+            "\t\t\"type\": \"event\"\n" +
+            "\t}\n" +
+            "]";
 
 
     Button sign;
     Button smart;
-
+    String sendResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +153,7 @@ public class ScanQR extends AppCompatActivity {
         smart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                executeContractFunction();
+                executeContractFunction(sendResult);
             }
         });
     }
@@ -110,7 +190,7 @@ public class ScanQR extends AppCompatActivity {
     }
 
 
-    public void executeContractFunction() {
+    public void executeContractFunction(String result) {
         Caver caver = new Caver(Caver.BAOBAB_URL);
         SingleKeyring executor = KeyringFactory.createFromPrivateKey("0x6fcc47c6988c2f1ef5b7e65121215d26a1d9483d1b46a18e4841d07d9a233df1");
         caver.wallet.add(executor);
@@ -122,8 +202,9 @@ public class ScanQR extends AppCompatActivity {
             sendOptions.setFrom(executor.getAddress());
             sendOptions.setGas(BigInteger.valueOf(4000000));
 
+            Log.d("result",result);
             //여기서 함수 이름 설정
-            TransactionReceipt.TransactionReceiptData receipt = contract.getMethod("set").send(Arrays.asList("test","testValue"), sendOptions);
+            TransactionReceipt.TransactionReceiptData receipt = contract.getMethod("insertInformation").send(Arrays.asList(result), sendOptions);
         } catch (IOException | TransactionException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             //handle exception..
         }
@@ -138,6 +219,8 @@ public class ScanQR extends AppCompatActivity {
                 backToMainActivity();// todo
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                sendResult = result.getContents();
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
