@@ -1,18 +1,13 @@
-package com.example.chaina.map;
+package com.example.chaina.map.gara;
 
-import com.google.gson.annotations.SerializedName;
-
-public class RecordResponse {
-    @SerializedName("lat")
-    private String lat;
-    @SerializedName("lng")
-    private String lng;
-    @SerializedName("companyName")
-    private String companyName;
-    @SerializedName("addressName")
-    private String addressName;
-    @SerializedName("time")
-    private String time;
+public class Trace {
+    public Trace(String lat, String lng, String companyName, String addressName, String time) {
+        this.lat = lat;
+        this.lng = lng;
+        this.companyName = companyName;
+        this.addressName = addressName;
+        this.time = time;
+    }
 
     public String getLat() {
         return lat;
@@ -53,4 +48,10 @@ public class RecordResponse {
     public void setTime(String time) {
         this.time = time;
     }
+
+    private String lat;
+    private String lng;
+    private String companyName;
+    private String addressName;
+    private String time;
 }
