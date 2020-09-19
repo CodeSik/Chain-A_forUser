@@ -1,6 +1,4 @@
-package map;
-
-import java.util.ArrayList;
+package com.example.chaina.map;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

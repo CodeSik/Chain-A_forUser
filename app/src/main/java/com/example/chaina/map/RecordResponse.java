@@ -1,4 +1,4 @@
-package map;
+package com.example.chaina.map;
 
 import com.google.gson.annotations.SerializedName;
 
