@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "gps_table")
+@Entity(tableName = "gps_total_table")
 public class GPSTotal {
 
     public void setLongitude(double longitude) {

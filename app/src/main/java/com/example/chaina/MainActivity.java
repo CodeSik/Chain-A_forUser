@@ -48,6 +48,9 @@ import java.util.Date;
 import GPSInfo.GPS;
 import GPSInfo.GPSDao;
 import GPSInfo.GPSDatabase;
+import GPSTotalInfo.GPSTotal;
+import GPSTotalInfo.GPSTotalDao;
+import GPSTotalInfo.GPSTotalDatabase;
 import Transaction.TransactionFragment;
 import Utils.BackPressCloseHandler;
 import map.MapFragment;
@@ -93,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
     // DB
     GPSDatabase db;
+    GPSTotalDatabase totalDb;
+
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
         //디비 생성
         db = GPSDatabase.getAppDatabase(this);
-
+        totalDb = GPSTotalDatabase.getAppDatabase(this);
         //UI 갱신 (라이브데이터 Observer 이용, 해당 디비값이 변화가생기면 실행됨)
 
 
@@ -247,7 +252,24 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                         Toast.LENGTH_SHORT).show();
                 //DB Insert
                 new InsertAsyncTask(db.gpsDao()).execute(new GPS(location.getLongitude(),location.getLatitude(), DateFormat.getDateTimeInstance().format(new Date())));
+                new InsertTotalAsyncTask(totalDb.gpsTotalDao()).execute(new GPSTotal(location.getLongitude(),location.getLatitude(), DateFormat.getDateTimeInstance().format(new Date())));
             }
+        }
+    }
+
+    public static class InsertTotalAsyncTask extends AsyncTask<GPSTotal, Void, Void> {
+        private GPSTotalDao mGpsTotalDao;
+
+        public InsertTotalAsyncTask(GPSTotalDao mGpsTotalDao){
+            this.mGpsTotalDao = mGpsTotalDao;
+        }
+
+        @Override //백그라운드작업(메인스레드 X)
+        protected Void doInBackground(GPSTotal... gpses) {
+            //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
+            //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
+            mGpsTotalDao.insert(gpses[0]);
+            return null;
         }
     }
 
@@ -255,8 +277,10 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     public static class InsertAsyncTask extends AsyncTask<GPS, Void, Void> {
         private GPSDao mGpsDao;
 
-        public  InsertAsyncTask(GPSDao mGpsDao){
+
+        public InsertAsyncTask(GPSDao mGpsDao){
             this.mGpsDao = mGpsDao;
+
         }
 
         @Override //백그라운드작업(메인스레드 X)

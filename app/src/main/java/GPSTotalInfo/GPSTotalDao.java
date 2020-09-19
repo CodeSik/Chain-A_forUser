@@ -4,19 +4,17 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import GPSInfo.GPS;
-
 @Dao
 public interface GPSTotalDao {
-    @Query("SELECT * FROM gps_table")
-    public GPS[] getAll();
+    @Query("SELECT * FROM gps_total_table")
+    public GPSTotal[] getAll();
 
     @Insert
-    void insertAll(GPS... gps);
+    void insertAll(GPSTotal... gps);
 
     @Insert
-    void insert(GPS gps);
+    void insert(GPSTotal gps);
 
-    @Query("DELETE FROM gps_table")
+    @Query("DELETE FROM gps_total_table")
     void deleteAll();
 }

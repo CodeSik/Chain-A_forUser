@@ -39,10 +39,13 @@ import java.util.Arrays;
 import GPSInfo.GPS;
 import GPSInfo.GPSDao;
 import GPSInfo.GPSDatabase;
+import GPSTotalInfo.GPSTotalDao;
+import GPSTotalInfo.GPSTotalDatabase;
 
 
 public class ScanQR extends AppCompatActivity {
     GPSDatabase db;
+    GPSTotalDatabase totaldb;
     private IntentIntegrator qrScan;
 
     ScwService scwServiceInstance;
@@ -139,6 +142,7 @@ public class ScanQR extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanqr);
         db = GPSDatabase.getAppDatabase(this);
+        totaldb = GPSTotalDatabase.getAppDatabase(this);
         address = findViewById(R.id.address_text);
         smart = findViewById(R.id.smart);
 
@@ -155,7 +159,7 @@ public class ScanQR extends AppCompatActivity {
         smart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GetAsyncTask(db.gpsDao()).execute(sendResult);
+                new GetAsyncTask(db.gpsDao(),totaldb.gpsTotalDao()).execute(sendResult);
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
@@ -229,10 +233,13 @@ public class ScanQR extends AppCompatActivity {
     //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
     public class GetAsyncTask extends AsyncTask<String, Void, Void> {
         private GPSDao mGpsDao;
+        private GPSTotalDao mGpsTotalDao;
 
         private String result;
-        public  GetAsyncTask(GPSDao mGpsDao){
+
+        public  GetAsyncTask(GPSDao mGpsDao, GPSTotalDao mGpsTotalDao){
             this.mGpsDao = mGpsDao;
+            this.mGpsTotalDao = mGpsTotalDao;
         }
 
         ProgressDialog asyncDialog = new ProgressDialog(ScanQR.this);
@@ -240,12 +247,8 @@ public class ScanQR extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
             asyncDialog.setMessage("전송 중 입니다..");
-
             asyncDialog.show();
-
-
             super.onPreExecute();
         }
 
@@ -299,12 +302,13 @@ public class ScanQR extends AppCompatActivity {
             caver.wallet.add(executor);
 
             try {
-                Contract contract = new Contract(caver, ABIJson, "0x07638a88d529c964d5ef5b6242fe11431abdc0ca");
+                Contract contract = new Contract(caver, ABIJson, "0xd163eb0e3e0b6076c191b33d68d6dee5f3dfce8f");
 
                 SendOptions sendOptions = new SendOptions();
                 sendOptions.setFrom(executor.getAddress());
                 sendOptions.setGas(BigInteger.valueOf(4000000));
 
+                mGpsDao.deleteAll();
                 Log.d("result",result);
                 //여기서 함수 이름 설정
                 TransactionReceipt.TransactionReceiptData receipt = contract.getMethod("insertInformation").send(Arrays.asList(result), sendOptions);
