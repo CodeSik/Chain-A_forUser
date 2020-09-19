@@ -37,27 +37,26 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.chaina.GPSInfo.GPS;
+import com.example.chaina.GPSInfo.GPSDao;
+import com.example.chaina.GPSInfo.GPSDatabase;
+import com.example.chaina.GPSTotalInfo.GPSTotal;
+import com.example.chaina.GPSTotalInfo.GPSTotalDao;
+import com.example.chaina.GPSTotalInfo.GPSTotalDatabase;
+import com.example.chaina.Transaction.TransactionFragment;
+import com.example.chaina.map.MapFragment;
+import com.example.chaina.menu.DrawerAdapter;
+import com.example.chaina.menu.DrawerItem;
+import com.example.chaina.menu.SimpleItem;
+import com.example.chaina.menu.SpaceItem;
 import com.google.android.material.snackbar.Snackbar;
+import com.yarolegovich.slidingrootnav.BuildConfig;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
-import GPSInfo.GPS;
-import GPSInfo.GPSDao;
-import GPSInfo.GPSDatabase;
-import GPSTotalInfo.GPSTotal;
-import GPSTotalInfo.GPSTotalDao;
-import GPSTotalInfo.GPSTotalDatabase;
-import Transaction.TransactionFragment;
-import Utils.BackPressCloseHandler;
-import map.MapFragment;
-import menu.DrawerAdapter;
-import menu.DrawerItem;
-import menu.SimpleItem;
-import menu.SpaceItem;
 
 
 public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
     //위치 서비스 코드
     /**
-     * Receiver for broadcasts sent by {@link LocationUpdatesService}.
+     * Receiver for broadcasts sent by {@link com.example.chaina.LocationUpdatesService}.
      */
     private class MyReceiver extends BroadcastReceiver {
         @Override

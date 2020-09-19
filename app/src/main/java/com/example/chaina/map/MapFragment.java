@@ -1,4 +1,4 @@
-package map;
+package com.example.chaina.map;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,10 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chaina.MainActivity;
 import com.example.chaina.R;
-
-import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 

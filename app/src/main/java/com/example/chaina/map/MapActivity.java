@@ -1,10 +1,10 @@
-package map;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.chaina.map;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chaina.R;
 

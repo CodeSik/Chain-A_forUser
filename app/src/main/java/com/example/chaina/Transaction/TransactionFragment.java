@@ -1,4 +1,4 @@
-package Transaction;
+package com.example.chaina.Transaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -95,7 +95,7 @@ public class TransactionFragment extends Fragment {
         builder.show();
     }
     private void cameraIntent() {
-        Intent intent = new Intent(getActivity(),ScanQR.class);
+        Intent intent = new Intent(getActivity(), ScanQR.class);
         startActivity(intent);
     }
 

@@ -1,4 +1,4 @@
-package GPSTotalInfo;
+package com.example.chaina.GPSInfo;
 
 import android.content.Context;
 
@@ -6,23 +6,22 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-
-@Database(entities = {GPSTotal.class}, version =  1)
-public abstract class GPSTotalDatabase extends RoomDatabase {
+@Database(entities = {GPS.class}, version =  1)
+public abstract class GPSDatabase extends RoomDatabase {
 
     //데이터베이스를 매번 생성하는건 리소스를 많이사용하므로 싱글톤이 권장된다고한다.
-    private static GPSTotalDatabase INSTANCE;
+    private static GPSDatabase INSTANCE;
 
-    public abstract GPSTotalDao gpsTotalDao();
+    public abstract GPSDao gpsDao();
 
 
     //디비객체생성 가져오기
-    public static GPSTotalDatabase getAppDatabase(Context context){
+    public static GPSDatabase getAppDatabase(Context context){
         if(INSTANCE == null){
-            synchronized (GPSTotalDatabase.class) {
+            synchronized (GPSDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            GPSTotalDatabase.class, "gps_total_database")
+                            GPSDatabase.class, "gps_database")
                             .build();
                 }
             }

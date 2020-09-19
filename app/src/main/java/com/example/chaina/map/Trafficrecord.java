@@ -1,4 +1,4 @@
-package map;
+package com.example.chaina.map;
 
 public class Trafficrecord {
     public String date;

@@ -1,4 +1,4 @@
-package GPSTotalInfo;
+package com.example.chaina.GPSTotalInfo;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

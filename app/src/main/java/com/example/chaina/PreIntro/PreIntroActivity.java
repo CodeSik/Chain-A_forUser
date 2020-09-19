@@ -1,4 +1,4 @@
-package PreIntro;
+package com.example.chaina.PreIntro;
 
 import android.Manifest;
 import android.content.Intent;

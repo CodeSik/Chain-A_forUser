@@ -1,4 +1,4 @@
-package Transaction;
+package com.example.chaina.Transaction;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,6 +13,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.chaina.GPSInfo.GPS;
+import com.example.chaina.GPSInfo.GPSDao;
+import com.example.chaina.GPSInfo.GPSDatabase;
+import com.example.chaina.GPSTotalInfo.GPSTotalDao;
+import com.example.chaina.GPSTotalInfo.GPSTotalDatabase;
 import com.example.chaina.MainActivity;
 import com.example.chaina.R;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -36,11 +41,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import GPSInfo.GPS;
-import GPSInfo.GPSDao;
-import GPSInfo.GPSDatabase;
-import GPSTotalInfo.GPSTotalDao;
-import GPSTotalInfo.GPSTotalDatabase;
 
 
 public class ScanQR extends AppCompatActivity {
@@ -302,7 +302,7 @@ public class ScanQR extends AppCompatActivity {
             caver.wallet.add(executor);
 
             try {
-                Contract contract = new Contract(caver, ABIJson, "0xd163eb0e3e0b6076c191b33d68d6dee5f3dfce8f");
+                Contract contract = new Contract(caver, ABIJson, "0x275e2c88ca650e46f1a9eff09cdd61a543afad06");
 
                 SendOptions sendOptions = new SendOptions();
                 sendOptions.setFrom(executor.getAddress());

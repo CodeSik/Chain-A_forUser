@@ -1,4 +1,4 @@
-package PreIntro;
+package com.example.chaina.PreIntro;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
