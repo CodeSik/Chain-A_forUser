@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.chaina.map.MapActivity"></activity>
+        <activity android:name=".Intro.IntroActivity"></activity>
+        <activity android:name=".map.MapActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -43,12 +44,12 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="7b0ec7abc0a44d543f72acfb86f1ebeb" />
 
-        <activity android:name="com.example.chaina.Transaction.ScanQR" />
+        <activity android:name=".Transaction.ScanQR" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
-        <activity android:name="com.example.chaina.Loading.LoadingActivity">
+        <activity android:name=".Loading.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,10 +57,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name="com.example.chaina.PreIntro.PreIntroActivity" />
+        <activity android:name=".PreIntro.PreIntroActivity" />
 
         <service
-            android:name=".LocationUpdatesService"
+            android:name=".Intro.LocationUpdatesService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="location" />

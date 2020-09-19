@@ -7,10 +7,10 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.chaina.Intro.IntroActivity;
+import com.example.chaina.MainActivity;
 import com.example.chaina.R;
 import com.github.paolorotolo.appintro.AppIntro;
-
-import com.example.chaina.MainActivity;
 
 public class PreIntroActivity extends AppIntro {
 
@@ -84,7 +84,7 @@ public class PreIntroActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, IntroActivity.class);
         startActivity(intent);
         finish();
     }

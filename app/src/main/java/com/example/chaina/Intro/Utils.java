@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.example.chaina;
+package com.example.chaina.Intro;
 
 
 import android.content.Context;
 import android.location.Location;
 import android.preference.PreferenceManager;
+
+import com.example.chaina.R;
 
 import java.text.DateFormat;
 import java.util.Date;

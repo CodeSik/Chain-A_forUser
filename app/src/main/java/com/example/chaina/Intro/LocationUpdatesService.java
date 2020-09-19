@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.chaina;
+package com.example.chaina.Intro;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -38,6 +38,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.chaina.MainActivity;
+import com.example.chaina.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
