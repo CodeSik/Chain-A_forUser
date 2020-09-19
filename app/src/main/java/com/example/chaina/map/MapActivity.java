@@ -2,7 +2,9 @@ package com.example.chaina.map;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +15,12 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapActivity extends AppCompatActivity {
 
@@ -39,5 +47,19 @@ public class MapActivity extends AppCompatActivity {
         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
         int padding = 100; // px
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+
+        Request.getService().get().enqueue(new Callback<ArrayList<RecordResponse>>() {
+            @Override
+            public void onResponse(Call<ArrayList<RecordResponse>> call, Response<ArrayList<RecordResponse>> response) {
+                Log.d("RESPONSE", response.body().toString());
+                Toast.makeText(MapActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<RecordResponse>> call, Throwable t) {
+                Log.e("RESPONSE", t.toString());
+                Toast.makeText(MapActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
