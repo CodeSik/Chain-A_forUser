@@ -4,14 +4,14 @@
     <string-array name="ld_activityScreenTitles">
         <item>방문 채크</item>
         <item>동선 확인</item>
-
+        <item>임시 작업</item>
         <item>로그아웃</item>
     </string-array>
 
     <array name="ld_activityScreenIcons">
         <item>@drawable/ic_logout_grey600_24dp</item>
         <item>@drawable/ic_logout_grey600_24dp</item>
-
+        <item>@drawable/ic_logout_grey600_24dp</item>
         <item>@drawable/ic_logout_grey600_24dp</item>
     </array>
 

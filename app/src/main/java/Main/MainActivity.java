@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
     private static final int POS_TRANSACTION = 0;
     private static final int POS_MAP = 1;
-    private static final int POS_LOGOUT = 2;
+    private static final int POS_TEMP = 2;
+    private static final int POS_LOGOUT = 3;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TRANSACTION).setChecked(true),
                 createItemFor(POS_MAP),
+                createItemFor(POS_TEMP),
                 new SpaceItem(48),
                 createItemFor(POS_LOGOUT)));
         adapter.setListener(this);
@@ -109,8 +111,13 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
             Fragment selectedScreen = new MapFragment();
             showFragment(selectedScreen);
         }
+        else if (position == POS_TEMP) {
+            slidingRootNav.closeMenu();
+            Fragment selectedScreen = new TransactionFragment();
+            showFragment(selectedScreen);
+        }
         else {
-
+            slidingRootNav.closeMenu();
         }
     }
 
