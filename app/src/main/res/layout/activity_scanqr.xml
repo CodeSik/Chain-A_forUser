@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="Transaction.ScanQR">
-    <Button
-        android:id="@+id/signtransaction"
+
+    <TextView
+        android:id="@+id/address_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="341dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="342dp"
-        android:text="Button"
+        android:layout_marginStart="205dp"
+        android:layout_marginTop="91dp"
+        android:layout_marginEnd="206dp"
+        android:layout_marginBottom="608dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,16 +22,47 @@
 
     <Button
         android:id="@+id/smart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="249dp"
-        android:text="smart"
+        android:layout_width="334dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="635dp"
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/renderforbutton"
+        android:padding="10dp"
+        android:text="승인하고 보내기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signtransaction" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="305dp"
+        android:layout_marginBottom="582dp"
+        android:text="마지막 주소"
+        app:layout_constraintBottom_toTopOf="@+id/smart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="344dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="271dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="163dp"
+        android:background="@drawable/renderforimage"
+        android:text="이 장소를 방문하기 전까지의 경로를 전송하며, 개인정보를 수집하지 않습니다. 코로나로부터 안전한 사회를 만들기 위해 동참해주셔서 감사합니다."
+        app:layout_constraintBottom_toTopOf="@+id/smart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,12 +24,16 @@ import com.klaytn.caver.wallet.keyring.KeyringFactory;
 import com.klaytn.caver.wallet.keyring.SingleKeyring;
 import com.samsung.android.sdk.coldwallet.ScwService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.web3j.protocol.exceptions.TransactionException;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.Arrays;
+
+import Main.MainActivity;
 
 
 public class ScanQR extends AppCompatActivity {
@@ -118,45 +123,45 @@ public class ScanQR extends AppCompatActivity {
             "]";
 
 
-    Button sign;
+    TextView address;
     Button smart;
     String sendResult;
+    String address_string;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanqr);
+
+        address = findViewById(R.id.address_text);
+        smart = findViewById(R.id.smart);
+
+
         if (android.os.Build.VERSION.SDK_INT > 9) { StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); StrictMode.setThreadPolicy(policy); }
-
-
 
         qrScan = new IntentIntegrator(this);
         qrScan.setOrientationLocked(false); // default가 세로모드인데 휴대폰 방향에 따라 가로, 세로로 자동 변경됩니다.
         qrScan.initiateScan();
         qrScan.setPrompt("QR 코드를 사각형 안에 맞춰주세요.");
 
-        sign = findViewById(R.id.signtransaction);
 
-        sign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    signTransaction();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-        smart = findViewById(R.id.smart);
 
         smart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executeContractFunction(sendResult);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
             }
         });
+
+
+
     }
+
+
+
     public void signTransaction() throws IOException {
         Caver caver = new Caver(Caver.BAOBAB_URL);
 // Add a keyring to caver.wallet
@@ -189,7 +194,13 @@ public class ScanQR extends AppCompatActivity {
         System.out.println("Txhash: " + txHash);
     }
 
+    public String jsonParsing(String result) throws JSONException {
+        JSONObject jObject = new JSONObject(result);
 
+        String address = jObject.getString("addressName");
+
+        return address;
+    }
     public void executeContractFunction(String result) {
         Caver caver = new Caver(Caver.BAOBAB_URL);
         SingleKeyring executor = KeyringFactory.createFromPrivateKey("0x6fcc47c6988c2f1ef5b7e65121215d26a1d9483d1b46a18e4841d07d9a233df1");
@@ -220,6 +231,13 @@ public class ScanQR extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                 sendResult = result.getContents();
+                try {
+                    address_string = jsonParsing(sendResult);
+                    address.setText(address_string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
 
             }
         } else {
