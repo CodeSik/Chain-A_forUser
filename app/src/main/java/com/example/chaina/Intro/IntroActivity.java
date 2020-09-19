@@ -156,6 +156,7 @@ public class IntroActivity extends AppCompatActivity implements SharedPreference
             //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
             //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
             mGpsDao.insert(gpses[0]);
+            Log.d("Insert Done",gpses[0].toString());
             return null;
         }
     }
@@ -305,7 +306,6 @@ public class IntroActivity extends AppCompatActivity implements SharedPreference
                     mService.requestLocationUpdates();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
-                    finish();
                 }
             }
         });

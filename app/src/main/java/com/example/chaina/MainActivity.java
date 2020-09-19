@@ -3,7 +3,6 @@ package com.example.chaina;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -20,7 +19,6 @@ import com.example.chaina.map.MapFragment;
 import com.example.chaina.menu.DrawerAdapter;
 import com.example.chaina.menu.DrawerItem;
 import com.example.chaina.menu.SimpleItem;
-import com.example.chaina.menu.SpaceItem;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
@@ -31,26 +29,26 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
     private static final int POS_TRANSACTION = 0;
     private static final int POS_MAP = 1;
-    private static final int POS_TEMP = 2;
-    private static final int POS_LOGOUT = 3;
+    private static final int POS_LOGOUT = 2;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
 
-    private TextView mProbability;
+
     private SlidingRootNav slidingRootNav;
 
     private BackPressCloseHandler backPressCloseHandler = new BackPressCloseHandler(this);
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        backPressCloseHandler.onBackPressed();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -60,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setElevation(10);
         getSupportActionBar().setTitle("Chain:A");
+        getSupportActionBar().hide();
 
 
 
@@ -76,9 +75,9 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TRANSACTION).setChecked(true),
+
                 createItemFor(POS_MAP),
-                createItemFor(POS_TEMP),
-                new SpaceItem(48),
+
                 createItemFor(POS_LOGOUT)));
         adapter.setListener(this);
 
@@ -105,11 +104,6 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         } else if (position == POS_MAP) {
             slidingRootNav.closeMenu();
             Fragment selectedScreen = new MapFragment();
-            showFragment(selectedScreen);
-        }
-        else if (position == POS_TEMP) {
-            slidingRootNav.closeMenu();
-            Fragment selectedScreen = new TransactionFragment();
             showFragment(selectedScreen);
         }
         else {

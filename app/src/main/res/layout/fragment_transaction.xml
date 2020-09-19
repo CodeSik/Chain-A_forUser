@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/render"
-    tools:context="Transaction.TransactionFragment" >
+    tools:context="Transaction.TransactionFragment">
 
     <ImageView
         android:id="@+id/mapimage"
@@ -16,7 +16,7 @@
         android:layout_marginBottom="400dp"
         android:background="@drawable/renderforimage"
         android:padding="10dp"
-        android:src="@drawable/mapimage"
+        android:src="@drawable/route"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,11 +41,12 @@
         android:id="@+id/qrbutton"
         android:layout_width="370dp"
         android:layout_height="54dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="87dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="94dp"
         android:background="@drawable/renderforbutton"
+        android:padding="10dp"
         android:text="QR 코드 촬영하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
