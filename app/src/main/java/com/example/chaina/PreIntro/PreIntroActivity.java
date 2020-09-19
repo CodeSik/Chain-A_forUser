@@ -31,7 +31,7 @@ public class PreIntroActivity extends AppIntro {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);  // 화면위 타이틀 없애기
 
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_splash);
+      //  setContentView(R.layout.fragment_splash_permission);
 
 //        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            Window w = getWindow(); // in Activity's onCreate() for instance
@@ -49,7 +49,7 @@ public class PreIntroActivity extends AppIntro {
         setFadeAnimation();
 //        setSlideOverAnimation();
         //흰색
-        int white = getResources().getColor(R.color.white);
+        int white = getResources().getColor(R.color.colorAccent);
 
         setBarColor(white);
 
