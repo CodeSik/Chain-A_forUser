@@ -133,7 +133,7 @@ public class ScanQR extends AppCompatActivity {
 
     TextView address;
     Button smart;
-    String sendResult="{";
+    String sendResult="[";
     String address_string;
 
 
@@ -294,7 +294,7 @@ public class ScanQR extends AppCompatActivity {
                 strings[0] += gpsList[i].getTime();
                 strings[0] += "\"}";
             }
-            strings[0] += "}";
+            strings[0] += "]";
             this.result=strings[0];
 
             Caver caver = new Caver(Caver.BAOBAB_URL);
