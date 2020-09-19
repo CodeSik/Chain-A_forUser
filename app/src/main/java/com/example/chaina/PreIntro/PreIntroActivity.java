@@ -43,8 +43,8 @@ public class PreIntroActivity extends AppIntro {
 
 
         setIndicatorColor(
-                selectedIndicatorColor = getColor(R.color.colorAccent),
-                unselectedIndicatorColor = getColor(R.color.colorAccent)
+                selectedIndicatorColor = getColor(R.color.white),
+                unselectedIndicatorColor = getColor(R.color.white)
         );
         setFadeAnimation();
 //        setSlideOverAnimation();
