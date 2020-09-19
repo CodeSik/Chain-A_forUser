@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import com.example.chaina.R;
 import com.github.paolorotolo.appintro.AppIntro;
 
-import Main.MainActivity;
+import com.example.chaina.MainActivity;
 
 public class PreIntroActivity extends AppIntro {
 
@@ -20,7 +20,7 @@ public class PreIntroActivity extends AppIntro {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
             Manifest.permission.CAMERA};
 
 

@@ -33,7 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import Main.MainActivity;
+import com.example.chaina.MainActivity;
 
 
 public class ScanQR extends AppCompatActivity {
