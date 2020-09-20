@@ -41,28 +41,28 @@ public class MapActivity extends AppCompatActivity {
         MapPolyline sickLine = new MapPolyline();
 
         Data.getScene1().forEach(person -> {
-            MapPOIItem.MarkerType type;
             MapPolyline polyline;
-            int lineColor, markerColor;
+            int lineColor, imgId;
             if(person.getState() == 0) {
                 polyline = myLine;
-                type = MapPOIItem.MarkerType.BluePin;
-                lineColor = Color.argb(128, 0, 51, 196);
-                markerColor = Color.argb(64, 0, 196, 51);
+                imgId = R.drawable.ic_safe;
+                lineColor = Color.argb(255, 0, 51, 196);
             }
             else {
                 polyline = sickLine;
-                type = MapPOIItem.MarkerType.RedPin;
-                lineColor = Color.argb(128, 196, 51, 21);
-                markerColor = Color.argb(64, 196, 31, 0);
+                imgId = R.drawable.ic_corona;
+                lineColor = Color.argb(255, 196, 51, 21);
             }
 
             for (Trace trace : person.getTraces()) {
                 if(!trace.getCompanyName().isEmpty()) {
                     MapPOIItem marker = new MapPOIItem();
-                    marker.setItemName(trace.getCompanyName());
+                    marker.setItemName(trace.getCompanyName() + "\n" + trace.getTime());
                     marker.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(trace.getLat()), Double.parseDouble(trace.getLng())));
-                    marker.setMarkerType(type);
+                    marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    marker.setCustomImageResourceId(imgId);
+                    marker.setCustomImageAutoscale(false);
+                    marker.setCustomImageAnchor(0.5f, 1.0f);
                     markers.add(marker);
                 }
 
