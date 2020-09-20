@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,9 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.chaina.GPSInfo.GPS;
 import com.example.chaina.GPSInfo.GPSDao;
 import com.example.chaina.GPSInfo.GPSDatabase;
-import com.example.chaina.GPSTotalInfo.GPSTotalDao;
 import com.example.chaina.GPSTotalInfo.GPSTotalDatabase;
-import com.example.chaina.MainActivity;
 import com.example.chaina.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -135,7 +134,7 @@ public class ScanQR extends AppCompatActivity {
     Button smart;
     String sendResult="[";
     String address_string;
-
+    ProgressBar myProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +144,7 @@ public class ScanQR extends AppCompatActivity {
         totaldb = GPSTotalDatabase.getAppDatabase(this);
         address = findViewById(R.id.address_text);
         smart = findViewById(R.id.smart);
-
+        myProgressBar = (ProgressBar)findViewById(R.id.h_progressbar);
 
         if (android.os.Build.VERSION.SDK_INT > 9) { StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); StrictMode.setThreadPolicy(policy); }
 
@@ -159,9 +158,8 @@ public class ScanQR extends AppCompatActivity {
         smart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GetAsyncTask(db.gpsDao(),totaldb.gpsTotalDao()).execute(sendResult);
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+                new GetAsyncTask(100,db.gpsDao(),myProgressBar).execute(sendResult);
+                //finish();
             }
         });
 
@@ -233,22 +231,24 @@ public class ScanQR extends AppCompatActivity {
     //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
     public class GetAsyncTask extends AsyncTask<String, Void, Void> {
         private GPSDao mGpsDao;
-        private GPSTotalDao mGpsTotalDao;
 
+        int value;
+        ProgressBar progressBar;
+
+        ProgressDialog dialog = new ProgressDialog(ScanQR.this);
         private String result;
 
-        public  GetAsyncTask(GPSDao mGpsDao, GPSTotalDao mGpsTotalDao){
+        public  GetAsyncTask(int value, GPSDao mGpsDao, ProgressBar progressBar){
+            this.value = value;
             this.mGpsDao = mGpsDao;
-            this.mGpsTotalDao = mGpsTotalDao;
+            this.progressBar = progressBar;
         }
-
-        ProgressDialog asyncDialog = new ProgressDialog(ScanQR.this);
 
         @Override
         protected void onPreExecute() {
-            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            asyncDialog.setMessage("전송 중 입니다..");
-            asyncDialog.show();
+            progressBar.setMax(value);
+            progressBar.setProgress(0);
+            dialog.show();
             super.onPreExecute();
         }
 
@@ -256,22 +256,12 @@ public class ScanQR extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
             //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
-            for (int i = 0; i < 5; i++) {
-
-                asyncDialog.setProgress(i * 30);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
 
 
             GPS[] gpsList = mGpsDao.getAll();
             for(int i=0 ; i < gpsList.length ; i++)
             {
+                progressBar.incrementProgressBy(100/gpsList.length);
                 strings[0] += ",{";
 
                 strings[0] += "\"lat\":\"";
@@ -322,7 +312,9 @@ public class ScanQR extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            asyncDialog.dismiss();
+            dialog.dismiss();
+            finish();
+
         }
 
 
@@ -341,7 +333,7 @@ public class ScanQR extends AppCompatActivity {
 
 
                 try {
-                    address_string = jsonParsing(sendResult);
+                    address_string = jsonParsing(result.getContents());
                     address.setText(address_string);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -60,7 +60,7 @@
         <activity android:name=".PreIntro.PreIntroActivity" />
 
         <service
-            android:name=".Intro.LocationUpdatesService"
+            android:name=".LocationUpdatesService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="location" />
