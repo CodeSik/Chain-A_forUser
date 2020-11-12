@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chain.A</string>
+    <string name="app_name">체인코로나</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="location_updated">위치 갱신: %1$s</string>
